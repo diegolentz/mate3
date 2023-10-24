@@ -14,37 +14,36 @@ class Persona:
         self.dni = dni
         
     def guardar_en_xlsx(self, nombre_archivo):
-        # Abre el archivo Excel existente
-        workbook = openpyxl.load_workbook(nombre_archivo)
-        # Selecciona la hoja de trabajo (worksheet) donde deseas escribir
-        worksheet = workbook.active
+        try:
+            # Cargar el archivo Excel en un DataFrame
+            df = pd.read_excel(nombre_archivo, engine='openpyxl')
 
-        # Crear una lista de datos con los valores de la persona
-        datos = [self.nombre, self.apellido, self.ob_social, self.dx, self.urgencia, self.procedimiento, self.mail_contacto, self.departamento, self.dni]
+            # Crear un nuevo DataFrame con los datos de la persona
+            nueva_fila = pd.DataFrame({
+                'NOMBRE': [self.nombre],
+                'APELLIDO': [self.apellido],
+                'OB. SOCIAL': [self.ob_social],
+                'DIAGNOSTICO': [self.dx],
+                'URGENCIA': [self.urgencia],
+                'PROCEDIMIENTO': [self.procedimiento],
+                'MAIL': [self.mail_contacto],
+                'DEPARTAMENTO': [self.departamento],
+                'DNI': [self.dni]
+            })
 
-        # Validar si el DNI ya existe
-        for fila in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=9, max_col=9):
-            for celda in fila:
-                if celda.value == self.dni:
-                    print(f"El DNI {self.dni} ya existe en la fila {celda.row}. No se puede agregar la persona.")
-                    return  # Salir sin guardar los datos
+            # Concatenar el nuevo DataFrame a los datos existentes
+            df = pd.concat([df, nueva_fila], ignore_index=True)
 
-        # Encontrar la primera fila vacía en la columna A
-        fila = 1
-        while worksheet.cell(row=fila, column=1).value:
-            fila += 1
+            # Guardar el DataFrame actualizado en el archivo Excel
+            df.to_excel(nombre_archivo, index=False, engine='openpyxl')
+            print("Datos guardados exitosamente.")
+        except FileNotFoundError:
+            print(f"El archivo {nombre_archivo} no fue encontrado.")
 
-        # Añadir los datos a la fila encontrada
-        for col, dato in enumerate(datos, start=1):
-            worksheet.cell(row=fila, column=col, value=dato)
 
-        # Guardar los cambios en el archivo Excel
-        workbook.save(nombre_archivo)
-        # Cerrar el archivo Excel
-        workbook.close()
-        
-        
-        
+
+
+
 def eliminar_por_dni(nombre_archivo, dni_a_eliminar):
     try:
         # Cargar el archivo Excel en un DataFrame

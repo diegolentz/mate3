@@ -16,7 +16,6 @@ while opcion_principal < "4":
             print("1. Crear nuevo")
             print("2. Eliminar")
             print("0. Volver atrás \n")
-            
             subopcion_entity = input("Elige una opción: \n")
             
             if subopcion_entity == '1':
@@ -47,8 +46,7 @@ while opcion_principal < "4":
                 break  # Salir del menú de Entity Management y volver al menú principal
             else:
                 print("Opción no válida. Por favor, elige una opción válida.")
-
-
+                
     elif opcion_principal == '2':
         print("Estás en la página 2.")
     elif opcion_principal == '3':
