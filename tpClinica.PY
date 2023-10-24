@@ -1,4 +1,5 @@
 from persona import Persona
+from persona import eliminar_por_dni
 
 print("Bienvenido al sistema de gestión de clínicas \n")
 print("ENTITY MANAGEMENT => 1")
@@ -37,7 +38,11 @@ while opcion_principal < "4":
                 
             elif subopcion_entity == '2':
                 print("Has seleccionado 'Eliminar' dentro de Entity Management.")
-                # Coloca aquí la lógica para eliminar un elemento
+                dni_a_eliminar = input("Introduce el DNI a eliminar: ")
+                dni_a_eliminar = int(dni_a_eliminar)
+                
+                eliminar_por_dni('clinicaDB.xlsx', dni_a_eliminar)
+                                
             elif subopcion_entity == '0':
                 break  # Salir del menú de Entity Management y volver al menú principal
             else:
