@@ -1,5 +1,6 @@
 import pandas as pd
 import openpyxl
+import re
 
 class Persona:
     def __init__(self, nombre, apellido, ob_social, dx, urgencia, procedimiento, mail_contacto, departamento, dni):
@@ -41,7 +42,7 @@ class Persona:
             print(f"El archivo {nombre_archivo} no fue encontrado.")
 
 
-
+## funciones del menu 2 y 3
 
 
 def eliminar_por_dni(nombre_archivo, dni_a_eliminar):
@@ -64,3 +65,27 @@ def eliminar_por_dni(nombre_archivo, dni_a_eliminar):
 
     except FileNotFoundError:
         print(f"El archivo {nombre_archivo} no fue encontrado.")
+
+#
+
+def buscar(palabra, excel):
+    df = pd.read_excel(excel)
+    filas_coincidentes = set()  # Usamos un conjunto para evitar duplicados
+
+    # Recorrer las filas y columnas del DataFrame
+    for fila in df.index:
+        for columna in df.columns:
+            celda = str(df.at[fila, columna])
+            if re.search(palabra, celda):
+                filas_coincidentes.add(tuple(df.loc[fila]))
+
+    if filas_coincidentes:
+        # Crear un nuevo DataFrame con las filas coincidentes
+        resultado_df = pd.DataFrame(list(filas_coincidentes), columns=df.columns)
+
+        # Imprimir las filas coincidentes
+        print(resultado_df)
+    else:
+        print(f"No se encontraron filas que coincidan con '{palabra}'.")
+
+
