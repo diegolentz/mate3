@@ -1,18 +1,17 @@
 from persona import Persona
-from persona import eliminar_por_dni
-from persona import buscar
+from persona import eliminar_por_dni,buscar,validarString,validarUrgencia,validarProcedimiento,validar_email,validarDNI,validarDepartamento
 import networkx as nx
 import matplotlib.pyplot as plt
 import pandas as pd
 
-print("Bienvenido al sistema de gestión de clínicas \n")
+print("BIENVENIDO AL SISTEMA DE GESTION DE CLINICAS \n")
 print("ENTITY MANAGEMENT => 1")
 print("NETWORKX GRAPHIC => 2")
 print("SMART SEARCH => 3")
 print("EXIT => 0\n")
 
-opcion_principal = input("ELIJE TU OPCION : \n")
-while opcion_principal < "4":
+while True:
+    opcion_principal = input("ELIJE TU OPCION : \n")
 
     if opcion_principal == '1':
         while True:
@@ -25,16 +24,98 @@ while opcion_principal < "4":
             if subopcion_entity == '1':
                 print("Has seleccionado 'Crear nuevo' dentro de Entity Management.")
                 print("Completa los campos.\n")
-            
-                nombre = input("Nombre: ")
-                apellido = input("Apellido: ")
-                obSoc = input("Obra social: ")
-                diagnostico = input("Diagnóstico: ")
-                urgencia = input("Urgencia: ")
-                procedimiento = input("Procedimiento: ")
-                mail = input("e-mail: ")
-                departamento = input("Departamento: ")
-                dni = input("DNI: ")
+                
+                #verifica nombre, solo letras
+                while True:
+                    ingresa = input("Nombre: ")
+                    nombre = validarString(ingresa)
+
+                    if nombre:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                #verifica apellido, similar a nombre
+                while True:
+                    ingresa = input("Apellido: ")
+                    apellido = validarString(ingresa)
+
+                    if apellido:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                #verifica ob. social
+                while True:
+                    ingresa = input("Obra social: ")
+                    obSoc = validarString(ingresa)
+
+                    if obSoc:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                #valida diagnostico
+                while True:
+                    ingresa = input("Diagnóstico: ")
+                    diagnostico = validarString(ingresa)
+
+                    if diagnostico:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                #valido urgencia, solo puede ser alta/media/baja
+                while True:
+                    ingresa = input("Urgencia (1 para alta, 2 para media, 3 para baja): ")
+                    urgencia = validarUrgencia(ingresa)
+                    
+                    if urgencia:
+                        print(f"Urgencia: {urgencia}")
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, elija 1 para alta, 2 para media o 3 para baja.")
+               
+                #valido procedimiento, puede admitir caracteres numericos
+                while True:
+                    ingresa = input("Procedimiento: ")
+                    procedimiento = validarProcedimiento(ingresa)
+
+                    if procedimiento:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                #valido e-mail
+                while True:
+                    ingresa = input("e-mail: ")
+                    mail = validar_email(ingresa)
+
+                    if mail:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, vuelve a intentarlo.")
+                
+                #valido departamento
+                while True:
+                    ingresa = input("Departamento: (1 para traumatologia, 2 para cirujia, 3 para clinica, 4 para enfermeria )")
+                    departamento = validarDepartamento(ingresa)
+
+                    if departamento:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo numero.")
+                #valido dni
+                while True:
+                    ingresa = input("DNI: ")
+                    dni = validarDNI(ingresa)
+
+                    if dni:
+                        break  # Salir del bucle si la entrada es válida
+                    else:
+                        print("Entrada inválida. Por favor, ingrese solo letras y sin caracteres especiales.")
+                
+                
                 
                 nueva_persona = Persona(nombre, apellido, obSoc, diagnostico, urgencia, procedimiento, mail, departamento, dni)
                 nueva_persona.guardar_en_xlsx('clinicaDB.xlsx')
@@ -133,12 +214,17 @@ while opcion_principal < "4":
         print("Saliendo del programa.")
         break  # Salir del bucle while
     else:
-        print("Opción no válida. Por favor, elige una opción válida.")
-    
-    print("Bienvenido al sistema de gestión de clínicas \n")
+        print("\nOPCION INVALIDA, SELECCIONA ENTRE LAS SIGUIENTES.")  
+        print("ENTITY MANAGEMENT => 1")
+        print("NETWORKX GRAPHIC => 2")
+        print("SMART SEARCH => 3")
+        print("EXIT => 0\n")
+        
+    print("\nELIGE UNA OPCION \n.")  
     print("ENTITY MANAGEMENT => 1")
     print("NETWORKX GRAPHIC => 2")
     print("SMART SEARCH => 3")
     print("EXIT => 0\n")
-
-    opcion_principal = input("ELIJE TU OPCION : \n")
+ 
+    
+print("hasta la proxima!")

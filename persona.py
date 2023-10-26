@@ -72,11 +72,14 @@ def buscar(palabra, excel):
     df = pd.read_excel(excel)
     filas_coincidentes = set()  # Usamos un conjunto para evitar duplicados
 
+    # Crear una expresión regular que coincida con la palabra, sin importar las mayúsculas y minúsculas
+    regex = re.compile(re.escape(palabra), re.IGNORECASE)
+
     # Recorrer las filas y columnas del DataFrame
     for fila in df.index:
         for columna in df.columns:
             celda = str(df.at[fila, columna])
-            if re.search(palabra, celda):
+            if regex.search(celda):
                 filas_coincidentes.add(tuple(df.loc[fila]))
 
     if filas_coincidentes:
@@ -84,8 +87,59 @@ def buscar(palabra, excel):
         resultado_df = pd.DataFrame(list(filas_coincidentes), columns=df.columns)
 
         # Imprimir las filas coincidentes
-        print(resultado_df)
+        print(resultado_df.to_string(justify='left', index=False))
     else:
         print(f"No se encontraron filas que coincidan con '{palabra}'.")
 
 
+def validarString(texto):
+     # Utilizar una expresión regular para verificar si solo contiene letras
+    if re.match("^[a-zA-Z ]{3,20}$", texto):
+        # Convertir el texto a minúsculas
+        return texto.upper()
+    else:
+         return None
+
+def validarUrgencia(urgencia):
+    if re.match("^[1-3]$", urgencia):
+        if urgencia == '1':
+            return "ALTA"
+        elif urgencia == '2':
+            return "MEDIA"
+        elif urgencia == '3':
+            return "BAJA"
+    return None
+
+
+def validarProcedimiento(procedimiento):
+    #verificar si contiene caracteres alfanuméricos y está en el rango de 3 a 50 caracteres
+    if re.match("^[a-zA-Z0-9 ]{3,50}$", procedimiento):
+        return procedimiento.upper()
+    else:
+        return None
+    
+def validar_email(email):
+    # Utilizar una expresión regular para validar el formato del correo electrónico
+    if re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
+        return email.lower()
+    else:
+        return None
+    
+def validarDNI(dni):
+    # Utilizar una expresión regular para verificar si el DNI contiene 7 u 8 dígitos numéricos
+    if re.match(r"^\d{7,8}$", dni):
+        return dni
+    else:
+        return None
+    
+def validarDepartamento(departamento):
+    if re.match("^[1-4]$", departamento):
+        if departamento == '1':
+            return "TRAUMATOLOGIA"
+        elif departamento == '2':
+            return "CIRUJIA"
+        elif departamento == '3':
+            return "CLINICA"
+        elif departamento == '4':
+            return "ENFERMERIA"
+    return None
